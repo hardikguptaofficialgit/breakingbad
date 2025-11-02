@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDG | Connect. Build. Grow.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJdZ3b98Ue64sQvXb+U4B63Hw3fA2E44E+E3JgC8YVj1V4p3iQ/iW0lqE20p4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* BASE & TYPOGRAPHY */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Colors: Blue, White/Light, Black/Dark */
+            --bg-dark: #0A0A0B; /* Deep Black/Charcoal */
+            --bg-mid: #1A1A1C;
+            --primary-blue: #2979FF; /* Electric Blue */
+            --text-light: #F0F0F0; /* Off-White */
+            --text-muted: #6C757D;
+            --nav-bg: rgba(10, 10, 11, 0.85); 
+
+            /* Fonts */
+            --font-main: 'Rajdhani', sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: var(--font-main);
+            color: var(--text-light);
+            background: var(--bg-dark);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-blue);
+        }
+
+        section {
+            padding: 120px 5%; /* More vertical spacing */
+            position: relative;
+            z-index: 2;
+            max-width: 1280px; /* Slightly wider content area */
+            margin: 0 auto;
+        }
+        
+        /* PIXEL BLAST BACKGROUND */
+        .pixel-blast-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            background: var(--bg-dark);
+        }
+
+        .pixel-blast-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* HEADER & FLOATING NAVIGATION */
+        header {
+            position: fixed;
+            top: 25px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; 
+            max-width: 1240px; 
+            padding: 18px 35px; /* Larger padding for a more floating look */
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            background: var(--nav-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(41, 121, 255, 0.3); /* Blue border */
+            border-radius: 15px; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7); /* Stronger shadow */
+        }
+        
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary-blue);
+            text-transform: uppercase;
+        }
+
+        nav a:not(.btn) {
+            margin-left: 35px;
+            font-size: 1.15rem;
+            color: var(--text-light);
+            transition: color 0.3s, text-shadow 0.3s;
+            position: relative;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        nav a:not(.btn)::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-blue);
+            transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother transition */
+        }
+
+        nav a:not(.btn):hover {
+            color: var(--primary-blue);
+            text-shadow: 0 0 5px var(--primary-blue);
+        }
+        
+        nav a:not(.btn):hover::after {
+            width: 100%;
+        }
+
+        /* CTA BUTTONS (MONOCHROME BLUE) */
+        .btn {
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            text-shadow: none;
+            font-family: var(--font-main);
+        }
+
+        .btn-primary {
+        margin-left: 20px;
+            background: var(--primary-blue);
+            color: var(--bg-dark); /* Dark text on blue */
+          
+        }
+
+        .btn-primary:hover {
+            background: var(--text-light); /* Light background on hover */
+            color: var(--primary-blue); /* Blue text on hover */
+            box-shadow: 0 0 35px var(--primary-blue);
+            transform: translateY(-4px);
+        }
+
+        .btn-secondary {
+            background: none; 
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 15px rgba(41, 121, 255, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue); /* Blue background on hover */
+            color: var(--bg-dark); /* Dark text on blue */
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 25px var(--primary-blue);
+            transform: translateY(-4px);
+        }
+        
+        /* HERO SECTION (CENTERED & SPACIOUS) */
+        #hero {
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 180px; 
+            pointer-events: auto;
+        }
+
+        .hero-content {
+            z-index: 5;
+            max-width: 900px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(4rem, 8vw, 7rem); 
+            margin-bottom: 30px;
+            color: var(--text-light);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            line-height: 1.1;
+        }
+        
+        .hero-content h1 span {
+            color: var(--primary-blue);
+            text-shadow: 0 0 20px var(--primary-blue);
+        }
+
+        .hero-content h3 {
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        /* ABOUT GDG SECTION */
+        #about {
+            text-align: center;
+        }
+
+        #about h2 {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            margin-bottom: 80px;
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        #about h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            box-shadow: 0 0 10px var(--primary-blue);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .about-card {
+            padding: 50px 30px;
+            border-radius: 16px;
+            background: var(--bg-mid); /* Solid dark background for structure */
+            border: 1px solid rgba(41, 121, 255, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .about-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 0 40px rgba(41, 121, 255, 0.8);
+            border-color: var(--primary-blue);
+        }
+
+        .about-card .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            text-shadow: 0 0 15px var(--primary-blue);
+        }
+
+        .about-card h3 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text-light);
+        }
+        
+        .about-card p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* EVENTS SECTION */
+        #events {
+            padding-bottom: 120px;
+        }
+        
+        #events h2 {
+            text-align: left;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            margin-bottom: 60px;
+            color: var(--text-light);
+        }
+
+        .event-list {
+            display: flex;
+            gap: 40px; /* More gap */
+            overflow-x: auto;
+            padding-bottom: 30px;
+            margin-bottom: 0; 
+            scrollbar-width: none;
+        }
+
+        .event-card {
+            flex: 0 0 320px; /* Slightly wider cards */
+            background: var(--bg-mid);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(240, 240, 240, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 35px rgba(41, 121, 255, 0.8);
+            border-color: var(--primary-blue);
+        }
+
+        .event-info {
+            padding: 25px;
+        }
+
+        .event-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .event-info p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+        }
+        
+        .event-info p i {
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .event-rsvp {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            margin-top: 25px;
+            background: var(--primary-blue);
+            color: var(--bg-dark);
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.4);
+        }
+
+        .event-rsvp:hover {
+            background: var(--text-light);
+            color: var(--primary-blue);
+            box-shadow: 0 0 20px var(--primary-blue);
+        }
+
+        /* CHAPTERS SECTION */
+        #chapters {
+            padding-top: 50px;
+            padding-bottom: 120px;
+            text-align: center;
+        }
+
+        #chapters h2 {
+            color: var(--primary-blue);
+            text-shadow: 0 0 10px rgba(41, 121, 255, 0.5);
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            margin-bottom: 40px;
+        }
+
+        #chapters p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            font-weight: 500;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 60px 5%;
+            border-top: 1px solid rgba(41, 121, 255, 0.2);
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-muted);
+            background-color: var(--bg-mid);
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            margin: 0 20px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-blue);
+        }
+        
+        /* RESPONSIVENESS */
+        @media (max-width: 992px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                top: 15px;
+                width: 95%;
+            }
+            
+            nav {
+                margin-top: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            nav a:not(.btn) {
+                margin: 5px 10px;
+                font-size: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .hero-content h1 {
+                font-size: 4.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            section {
+                padding: 80px 5%;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-ctas {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="pixel-blast-container" id="container"></div>
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 30px 70px; height: 100px;">
+    <div class="logo" style="display: flex; align-items: center;">
+        <img src="logo.png" 
+             alt="GDG Logo" style="height: 70px; width: auto; object-fit: contain; display: block;">
+  
+             <h1 style="margin-left: 15px; font-size: 1.8rem; color: var(--text-light); font-weight: 700;">GDG Global</h1>
+            </div>
+    <nav style="display: flex; gap: 30px; align-items: center;">
+        <a href="#about">About</a>
+        <a href="#events">Events</a>
+        <a href="#chapters">Chapters</a>
+        <a href="#" class="btn btn-primary">Join Now</a>
+    </nav>
+</header>
+
+
+
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>
+                    Connect. Build. Grow.
+                </h1>
+                <div class="hero-ctas">
+                    <a href="#" class="btn btn-primary">Locate Chapter</a>
+                    <a href="#events" class="btn btn-secondary">Upcoming Events</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>Our Mission: Empowering Developers</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="icon"><i class="fas fa-microchip"></i></div>
+                    <h3>Technical Innovation</h3>
+                    <p>Drive progress by exploring and mastering the latest in Android, Cloud, AI/ML, and Web platforms.</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon"><i class="fas fa-globe"></i></div>
+                    <h3>Global Community</h3>
+                    <p>Foster a supportive, inclusive network where knowledge and collaborative ideas are shared worldwide.</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Professional Growth</h3>
+                    <p>Provide the critical skills, resources, and mentorship needed to launch and advance your tech career.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="events">
+            <h2>Upcoming Community Events</h2>
+            <div class="event-list">
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>Flutter Forward: Recap & Code Lab</h3>
+                        <p><i class="far fa-calendar-alt"></i> Dec 15, 2025</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Tech Hub Auditorium</p>
+                        <a href="#" class="event-rsvp">RSVP Now</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>TensorFlow Day: ML for Web</h3>
+                        <p><i class="far fa-calendar-alt"></i> Jan 20, 2026</p>
+                        <p><i class="fas fa-broadcast-tower"></i> Online Global Stream</p>
+                        <a href="#" class="event-rsvp">RSVP Now</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>Cloud Study Jam: Essentials</h3>
+                        <p><i class="far fa-calendar-alt"></i> Feb 5, 2026</p>
+                        <p><i class="fas fa-terminal"></i> Local GDG Chapter</p>
+                        <a href="#" class="event-rsvp">RSVP Now</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-info">
+                        <h3>Kotlin Kicks-Off: Android Dev</h3>
+                        <p><i class="far fa-calendar-alt"></i> Feb 28, 2026</p>
+                        <p><i class="fas fa-building"></i> Innovation Center</p>
+                        <a href="#" class="event-rsvp">RSVP Now</a>
+                    </div>
+                </div>
+            </div>
+            <a href="#chapters" class="btn btn-secondary" style="margin-top: 40px;">Find More Events Near You</a>
+        </section>
+        
+        <section id="chapters">
+            <h2>Find Your Local GDG Chapter</h2>
+            <p>Connect with a local chapter for in-person events, networking, and mentorship opportunities. Discover where you belong.</p>
+            <a href="#" class="btn btn-primary" style="padding: 18px 50px; font-size: 1.2rem;">Start a Chapter</a>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">GDG Charter</a> 
+            <a href="#">Google Developers</a> 
+            <a href="#">Code of Conduct</a>
+        </div>
+        <p>System Online. All rights reserved. GDG Global Community.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module">
+        // --- Original PixelBlast Script Starts Here (Adapted for New Colors) ---
+        const container = document.getElementById('container');
+        
+        const SHAPE_MAP = { square: 0, circle: 1, triangle: 2, diamond: 3 };
+        const MAX_CLICKS = 10;
+
+        const VERTEX_SRC = `
+            void main() {
+                gl_Position = vec4(position, 1.0);
+            }
+        `;
+
+        const FRAGMENT_SRC = `
+            precision highp float;
+            uniform vec3 uColor;
+            uniform vec2 uResolution;
+            uniform float uTime;
+            uniform float uPixelSize;
+            uniform float uScale;
+            uniform float uDensity;
+            uniform float uPixelJitter;
+            uniform int uEnableRipples;
+            uniform float uRippleSpeed;
+            uniform float uRippleThickness;
+            uniform float uRippleIntensity;
+            uniform float uEdgeFade;
+            uniform int uShapeType;
+            const int SHAPE_SQUARE = 0;
+            const int SHAPE_CIRCLE = 1;
+            const int SHAPE_TRIANGLE = 2;
+            const int SHAPE_DIAMOND = 3;
+            const int MAX_CLICKS = 10;
+            uniform vec2 uClickPos[MAX_CLICKS];
+            uniform float uClickTimes[MAX_CLICKS];
+
+            float Bayer2(vec2 a) {
+                a = floor(a);
+                return fract(a.x / 2. + a.y * a.y * .75);
+            }
+            #define Bayer4(a) (Bayer2(.5*(a))*0.25 + Bayer2(a))
+            #define Bayer8(a) (Bayer4(.5*(a))*0.25 + Bayer2(a))
+
+            float hash11(float n){ return fract(sin(n)*43758.5453); }
+
+            float vnoise(vec3 p){
+                vec3 ip = floor(p);
+                vec3 fp = fract(p);
+                float n000 = hash11(dot(ip + vec3(0.0,0.0,0.0), vec3(1.0,57.0,113.0)));
+                float n100 = hash11(dot(ip + vec3(1.0,0.0,0.0), vec3(1.0,57.0,113.0)));
+                float n010 = hash11(dot(ip + vec3(0.0,1.0,0.0), vec3(1.0,57.0,113.0)));
+                float n110 = hash11(dot(ip + vec3(1.0,1.0,0.0), vec3(1.0,57.0,113.0)));
+                float n001 = hash11(dot(ip + vec3(0.0,0.0,1.0), vec3(1.0,57.0,113.0)));
+                float n101 = hash11(dot(ip + vec3(1.0,0.0,1.0), vec3(1.0,57.0,113.0)));
+                float n011 = hash11(dot(ip + vec3(0.0,1.0,1.0), vec3(1.0,57.0,113.0)));
+                float n111 = hash11(dot(ip + vec3(1.0,1.0,1.0), vec3(1.0,57.0,113.0)));
+                vec3 w = fp*fp*fp*(fp*(fp*6.0-15.0)+10.0);
+                float x00 = mix(n000, n100, w.x);
+                float x10 = mix(n010, n110, w.x);
+                float x01 = mix(n001, n101, w.x);
+                float x11 = mix(n011, n111, w.x);
+                float y0 = mix(x00, x10, w.y);
+                float y1 = mix(x01, x11, w.y);
+                return mix(y0, y1, w.z) * 2.0 - 1.0;
+            }
+
+            float fbm2(vec2 uv, float t){
+                vec3 p = vec3(uv * uScale, t);
+                float amp = 1.0;
+                float freq = 1.0;
+                float sum = 1.0;
+                for (int i = 0; i < 5; ++i){
+                    sum += amp * vnoise(p * freq);
+                    freq *= 1.25;
+                    amp *= 1.0;
+                }
+                return sum * 0.5 + 0.5;
+            }
+
+            float maskCircle(vec2 p, float cov){
+                float r = sqrt(cov) * .25;
+                float d = length(p - 0.5) - r;
+                float aa = 0.5 * fwidth(d);
+                return cov * (1.0 - smoothstep(-aa, aa, d * 2.0));
+            }
+
+            float maskTriangle(vec2 p, vec2 id, float cov){
+                bool flip = mod(id.x + id.y, 2.0) > 0.5;
+                if (flip) p.x = 1.0 - p.x;
+                float r = sqrt(cov);
+                float d = p.y - r*(1.0 - p.x);
+                float aa = fwidth(d);
+                return cov * clamp(0.5 - d/aa, 0.0, 1.0);
+            }
+
+            float maskDiamond(vec2 p, float cov){
+                float r = sqrt(cov) * 0.564;
+                return step(abs(p.x - 0.49) + abs(p.y - 0.49), r);
+            }
+
+            void main(){
+                float pixelSize = uPixelSize;
+                vec2 fragCoord = gl_FragCoord.xy - uResolution * .5;
+                float aspectRatio = uResolution.x / uResolution.y;
+                vec2 pixelId = floor(fragCoord / pixelSize);
+                vec2 pixelUV = fract(fragCoord / pixelSize);
+                float cellPixelSize = 8.0 * pixelSize;
+                vec2 cellId = floor(fragCoord / cellPixelSize);
+                vec2 cellCoord = cellId * cellPixelSize;
+                vec2 uv = cellCoord / uResolution * vec2(aspectRatio, 1.0);
+                float base = fbm2(uv, uTime * 0.05);
+                base = base * 0.5 - 0.65;
+                float feed = base + (uDensity - 0.5) * 0.3;
+                float speed = uRippleSpeed;
+                float thickness = uRippleThickness;
+
+                if (uEnableRipples == 1) {
+                    for (int i = 0; i < MAX_CLICKS; ++i){
+                        vec2 pos = uClickPos[i];
+                        if (pos.x < 0.0) continue;
+                        float cellPixelSize = 8.0 * pixelSize;
+                        vec2 cuv = (((pos - uResolution * .5 - cellPixelSize * .5) / (uResolution))) * vec2(aspectRatio, 1.0);
+                        float t = max(uTime - uClickTimes[i], 0.0);
+                        float r = distance(uv, cuv);
+                        float waveR = speed * t;
+                        float ring = exp(-pow((r - waveR) / thickness, 2.0));
+                        float atten = exp(-1.0 * t) * exp(-10.0 * r);
+                        feed = max(feed, ring * atten * uRippleIntensity);
+                    }
+                }
+
+                float bayer = Bayer8(fragCoord / uPixelSize) - 0.5;
+                float bw = step(0.5, feed + bayer);
+                float h = fract(sin(dot(floor(fragCoord / uPixelSize), vec2(127.1, 311.7))) * 43758.5453);
+                float jitterScale = 1.0 + (h - 0.5) * uPixelJitter;
+                float coverage = bw * jitterScale;
+                float M;
+                if (uShapeType == SHAPE_CIRCLE) M = maskCircle(pixelUV, coverage);
+                else if (uShapeType == SHAPE_TRIANGLE) M = maskTriangle(pixelUV, pixelId, coverage);
+                else if (uShapeType == SHAPE_DIAMOND) M = maskDiamond(pixelUV, coverage);
+                else M = coverage;
+
+                if (uEdgeFade > 0.0) {
+                    vec2 norm = gl_FragCoord.xy / uResolution;
+                    float edge = min(min(norm.x, norm.y), min(1.0 - norm.x, 1.0 - norm.y));
+                    float fade = smoothstep(0.0, uEdgeFade, edge);
+                    M *= fade;
+                }
+
+                vec3 color = uColor;
+                gl_FragColor = vec4(color, M);
+            }
+        `;
+
+        // Config - Tweaked for the new Blue color
+        let config = {
+            variant: 'square', // Using 'square' for a sharper, tech look
+            pixelSize: 4, 
+            color: '#2979FF', // Primary accent: Electric Blue
+            patternScale: 1.5,
+            patternDensity: 1.2, 
+            pixelSizeJitter: 0.1,
+            enableRipples: true,
+            rippleIntensityScale: 1.5,
+            rippleThickness: 0.15,
+            rippleSpeed: 0.4,
+            edgeFade: 0.0, 
+            speed: 0.5,
+            liquid: false
+        };
+
+        // Setup renderer
+        const canvas = document.createElement('canvas');
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            alpha: true,
+            powerPreference: 'high-performance'
+        });
+        renderer.domElement.style.width = '100%';
+        renderer.domElement.style.height = '100%';
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        container.appendChild(renderer.domElement);
+        renderer.setClearAlpha(0);
+
+        // Setup uniforms
+        const uniforms = {
+            uResolution: { value: new THREE.Vector2(0, 0) },
+            uTime: { value: 0 },
+            uColor: { value: new THREE.Color(config.color) },
+            uClickPos: { value: Array.from({ length: MAX_CLICKS }, () => new THREE.Vector2(-1, -1)) },
+            uClickTimes: { value: new Float32Array(MAX_CLICKS) },
+            uShapeType: { value: SHAPE_MAP[config.variant] ?? 0 },
+            uPixelSize: { value: config.pixelSize * renderer.getPixelRatio() },
+            uScale: { value: config.patternScale },
+            uDensity: { value: config.patternDensity },
+            uPixelJitter: { value: config.pixelSizeJitter },
+            uEnableRipples: { value: config.enableRipples ? 1 : 0 },
+            uRippleSpeed: { value: config.rippleSpeed },
+            uRippleThickness: { value: config.rippleThickness },
+            uRippleIntensity: { value: config.rippleIntensityScale },
+            uEdgeFade: { value: config.edgeFade }
+        };
+
+        // Setup scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const material = new THREE.ShaderMaterial({
+            vertexShader: VERTEX_SRC,
+            fragmentShader: FRAGMENT_SRC,
+            uniforms,
+            transparent: true,
+            depthTest: false,
+            depthWrite: false
+        });
+
+        const quadGeom = new THREE.PlaneGeometry(2, 2);
+        const quad = new THREE.Mesh(quadGeom, material);
+        scene.add(quad);
+
+        const clock = new THREE.Clock();
+        let clickIx = 0;
+        const timeOffset = Math.random() * 1000;
+
+        // Resize handler
+        const setSize = () => {
+            const w = container.clientWidth || 1;
+            const h = container.clientHeight || 1;
+            renderer.setSize(w, h, false);
+            uniforms.uResolution.value.set(renderer.domElement.width, renderer.domElement.height);
+            uniforms.uPixelSize.value = config.pixelSize * renderer.getPixelRatio();
+        };
+        setSize();
+        window.addEventListener('resize', setSize);
+
+        // Mouse interaction
+        const mapToPixels = (e) => {
+            const rect = renderer.domElement.getBoundingClientRect();
+            const scaleX = renderer.domElement.width / rect.width;
+            const scaleY = renderer.domElement.height / rect.height;
+            const fx = (e.clientX - rect.left) * scaleX;
+            const fy = (rect.height - (e.clientY - rect.top)) * scaleY;
+            return { fx, fy };
+        };
+
+        // Only add click listener if background is visible/interactive
+        if(container) {
+            container.addEventListener('pointerdown', (e) => {
+                const { fx, fy } = mapToPixels(e);
+                uniforms.uClickPos.value[clickIx].set(fx, fy);
+                uniforms.uClickTimes.value[clickIx] = uniforms.uTime.value;
+                clickIx = (clickIx + 1) % MAX_CLICKS;
+            }, { passive: true });
+        }
+
+
+        // Animation loop
+        const animate = () => {
+            uniforms.uTime.value = timeOffset + clock.getElapsedTime() * config.speed;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        };
+        animate();
+        // --- Original PixelBlast Script Ends Here ---
+    </script>
+</body>
+</html>
